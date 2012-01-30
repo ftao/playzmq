@@ -19,19 +19,20 @@ class RPCClient(object):
         rep = json.loads(self.socket.recv())
         return rep
 
+def main(addr, start, count):
+    import os
+    import time
+    start_time = time.time()
+    pid = os.getpid()
 
+    client = RPCClient(addr)
+    for i in xrange(start, start+count):
+        x = i 
+        y = i+1
+        ret = client.call('mul', x, y)
+    #    print '[%s]call mul(%s,%s)=%s' %(pid, x, y, ret['ret'])
 
-def main():
-    client = RPCClient(sys.argv[1])
-    print 'call mul 3 4'
-    print 'ret', client.call('mul', 3, 4)
-
-    print 'call add 3 5'
-    print 'ret', client.call('add', 3, 5)
-
-    print 'call sub 3 5'
-    print 'ret', client.call('sub', 3, 5)
-
+    print '[%s]all request done, take %d' % (pid, time.time() - start_time)
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
